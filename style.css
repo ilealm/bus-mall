@@ -1,0 +1,11 @@
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#tblProducts{
+  border:1;
+}
+
+#munProductsToDisplay td:{
+  width: 30%;
+}
