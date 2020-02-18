@@ -43,20 +43,69 @@ function generatelistProductsToDisplay()
       }
     } //for(var i=0; i<lis
     if (!duplicated){
-      listProductsToDisplay.push(randomIndex);
+      listProductsToDisplay.push(randomIndex); // store the in in the array of products to display
+      allProductList[randomIndex].timesRendered++; // to have a control of how many times it was rendered
     }
   } //while (listProductsToDisplay.length < maxlistProductsToDisplay)
-
-
-
-  // review that the random product is not already in the array of products to display
-
-
-  allProductList[randomIndex].timesRendered++; // to have a control of how many times it was rendered
-  console.log('randomIndex: ' + randomIndex);
-  
-
 } //function displayProducts()
+
+/*
+This function will add rows and columns to table tblProducts showing whatever is stored 
+in listProductsToDisplay. It will create 3 images per row
+*/
+function renderProductsToDisplay()
+{
+  var numRowsToDisplay=0; //i will display 2 images per row
+  var numRowsCreated = 0; //to control how many rows I had created
+  var newImage;
+  var numColumsToDisplay = 2;
+  var tblProducts = document.getElementById('tblProducts');
+
+  // clean the table
+  tblProducts.innerHTML=null;
+  // obtain the number of rows to create
+  if (maxlistProductsToDisplay <= 2){
+    numRowsToDisplay = 1;
+  } 
+  else 
+  {
+    numRowsToDisplay = Math.ceil(maxlistProductsToDisplay/2);
+  }
+  // console.log('maxlistProductsToDisplay: ' + maxlistProductsToDisplay + ' / numRowsToDisplay ' + numRowsToDisplay);
+
+  var newRow, newCol;
+ 
+  for (var p=0; p<listProductsToDisplay.length; p++)
+  {
+    // newImage
+    newRow = document.createElement('tr');
+    newCol = document.createElement('rd');
+
+
+    newImage = document.createElement('img');
+    newImage.setAttribute('src',allProductList[listProductsToDisplay[p]].productPath);
+    newImage.setAttribute('alt', allProductList[listProductsToDisplay[p]].productName);
+    newCol.appendChild(newImage);
+    newRow.appendChild(newCol);
+    tblProducts.appendChild(newRow);
+    
+    // console.log(allProductList[listProductsToDisplay[p]].productName);
+  }
+
+  // for (var i = 0; i<numRowsToDisplay; i++)
+  // {
+  //   newRow = document.createElement('tr');
+  //   for (j=0; j<numColumsToDisplay;j++)
+  //   {
+  //     // i need a way to know how many imagines I had displayed
+  //   }
+  //   newCol = document.createElement('rd');
+  //   newCol.textContent=i;
+  //   newRow.appendChild(newCol);
+  //   tblProducts.appendChild(newRow);
+  // }
+
+} // renderProductsToDisplay()
 
 /////////////////////////
 /////  MAIN
@@ -73,12 +122,21 @@ new Product('breakfast', 'img/breakfast.jpg');
 new Product('bubblegum', 'img/bubblegum.jpg');
 new Product('chair', 'img/chair.jpg');
 new Product('cthulhu', 'img/cthulhu.jpg');
+new Product('dog-duck', 'img/dog-duck.jpg');
+new Product('dragon', 'img/dragon.jpg');
+new Product('pen', 'img/pen.jpg');
+new Product('pet-sweet', 'img/pet-sweet.jpg');
+new Product('scissors', 'img/scissors.jpg');
+new Product('shark', 'img/shark.jpg');
+new Product('sweep', 'img/sweep.png');
+new Product('tauntaun', 'img/tauntaun.jpg');
+new Product('unicorn', 'img/.jpg');
+new Product('usb', 'img/usb.gif');
+new Product('water-can', 'img/water-can.jpg');
+new Product('wine-glass', 'img/wine-glass.jpg');
 
+// calling functions to do the magic
 generatelistProductsToDisplay();
-  // render products
+renderProductsToDisplay();
 
-// Display maxlistProductsToDisplay in the table randomly
-
-
-console.log(allProductList);
 
