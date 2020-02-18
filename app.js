@@ -1,3 +1,5 @@
+'use strict';
+
 var maxlistProductsToDisplay, numClicksAvailable;
 var allProductList=[];  // array with products objects
 var listProductsToDisplay=[]; // here I will storage the products to display in the page
@@ -12,10 +14,7 @@ function Product(productName, productPath){
 
 function getRandomProductToDisplay()
 {
-  // var randomIndex = Math.floor(Math.random() * allProductList.length);
-  // return randomIndex;
   return(Math.floor(Math.random() * allProductList.length));
-
 }
 
 /*
@@ -66,15 +65,15 @@ function renderProductsToDisplay()
 
   // clean the table of the products
   tblProducts.innerHTML=null;
-  // obtain the number of rows to create
-  if (maxlistProductsToDisplay <= 2){
-    numRowsToDisplay = 1;
-  } 
-  else 
-  {
-    numRowsToDisplay = Math.ceil(maxlistProductsToDisplay/2);
-  }
-  // console.log('maxlistProductsToDisplay: ' + maxlistProductsToDisplay + ' / numRowsToDisplay ' + numRowsToDisplay);
+  // // obtain the number of rows to create
+  // if (maxlistProductsToDisplay <= 2){
+  //   numRowsToDisplay = 1;
+  // } 
+  // else 
+  // {
+  //   numRowsToDisplay = Math.ceil(maxlistProductsToDisplay/2);
+  // }
+  // // console.log('maxlistProductsToDisplay: ' + maxlistProductsToDisplay + ' / numRowsToDisplay ' + numRowsToDisplay);
 
   var newRow, newCol;
   // TODO: poner esto en una tabla
@@ -95,23 +94,7 @@ function renderProductsToDisplay()
     tblProducts.appendChild(newRow);
     // add event listener for the image
     newImage.addEventListener('click',handleClicks);
-    
-    // console.log(allProductList[listProductsToDisplay[p]].productName);
   }
-
-  // for (var i = 0; i<numRowsToDisplay; i++)
-  // {
-  //   newRow = document.createElement('tr');
-  //   for (j=0; j<numColumsToDisplay;j++)
-  //   {
-  //     // i need a way to know how many imagines I had displayed
-  //   }
-  //   newCol = document.createElement('rd');
-  //   newCol.textContent=i;
-  //   newRow.appendChild(newCol);
-  //   tblProducts.appendChild(newRow);
-  // }
-
 } // renderProductsToDisplay()
 
 function handleClicks(event)
@@ -147,7 +130,7 @@ function displayVotationResults()
 
   var ulVotingResults = document.getElementById('ulVotingResults');
   var liElement, votingMsg;
-   for (var i=0; i<allProductList.length; i++)
+  for (var i=0; i<allProductList.length; i++)
   {
     votingMsg = '';
     liElement = document.createElement('li');
@@ -158,49 +141,56 @@ function displayVotationResults()
 
     ulVotingResults.appendChild(liElement);
   }
-
-  // this display the voting results in a table
-  // var tblVotingResults= document.getElementById('tblVotingResults'); 
-  // // Create headers
-  // newRow = document.createElement('tr');
-  // newCol = document.createElement('th');
-  // newCol.textContent='Product';
-  // newRow.appendChild(newCol);
-  // newCol = document.createElement('th');
-  // newCol.textContent='Times Rendered';
-  // newRow.appendChild(newCol);
-  // newCol = document.createElement('th');
-  // newCol.textContent='Times Clicked';
-  // newRow.appendChild(newCol);
-  // tblVotingResults.appendChild(newRow);
-
-
-  // for (var i=0; i<allProductList.length; i++)
-  // {
-  //   newRow = document.createElement('tr');
-  //   newCol = document.createElement('td');
-  //   newCol.textContent= allProductList[i].productName;
-  //   newRow.appendChild(newCol);
-
-  //   newCol = document.createElement('td');
-  //   newCol.textContent= allProductList[i].timesClicked;
-  //   newRow.appendChild(newCol);
-
-  //   newCol = document.createElement('td');
-  //   newCol.textContent= allProductList[i].timesRendered;
-  //   newRow.appendChild(newCol);
-    
-
-  //   newRow.appendChild(newCol);
-  //   tblVotingResults.appendChild(newRow);
-  // }
+  displayCanvas();
 } //displayVotationResults
+
+
+function displayCanvas()
+{
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
 
 /////////////////////////
 /////  MAIN
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
-numClicksAvailable = 25 // max number of total clicks available in the site.
+numClicksAvailable = 5; // max number of total clicks available in the site.
 
 // populating the list of products. By now, I will just load the first 5. TODO add the rest 
 new Product('bag', 'img/bag.jpg');
@@ -226,6 +216,4 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 
 // calling functions to do the magic
 generatelistProductsToDisplay();
-// renderProductsToDisplay();
-
 
