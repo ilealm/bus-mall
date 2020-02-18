@@ -4,8 +4,15 @@ body{
 
 #tblProducts{
   border:1;
+  border-style: solid;
 }
 
 #munProductsToDisplay td:{
   width: 30%;
+}
+
+
+
+img {
+  width: 80px;
 }
