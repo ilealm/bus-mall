@@ -1,4 +1,4 @@
-var maxlistProductsToDisplay, maxNumSeletions;
+var maxlistProductsToDisplay, numClicksAvailable;
 var allProductList=[];  // array with products objects
 var listProductsToDisplay=[]; // here I will storage the products to display in the page
 
@@ -85,9 +85,13 @@ function renderProductsToDisplay()
     newImage = document.createElement('img');
     newImage.setAttribute('src',allProductList[listProductsToDisplay[p]].productPath);
     newImage.setAttribute('alt', allProductList[listProductsToDisplay[p]].productName);
+    newImage.setAttribute('id', listProductsToDisplay[p]); // is the allProductList array position, to make a direct ref
+
     newCol.appendChild(newImage);
     newRow.appendChild(newCol);
     tblProducts.appendChild(newRow);
+    // add event listener for the image
+    newImage.addEventListener('click',handleClicks);
     
     // console.log(allProductList[listProductsToDisplay[p]].productName);
   }
@@ -107,11 +111,29 @@ function renderProductsToDisplay()
 
 } // renderProductsToDisplay()
 
+function handleClicks(event)
+{
+  var clickedProduct;
+  // update the amount of clicks in the page
+  numClicksAvailable--;
+  alert('numClicksAvailable ' + numClicksAvailable);
+  // update the clicks in the image
+  clickedProduct = event.target.getAttribute('id');
+  allProductList[clickedProduct].timesClicked++;
+
+  alert(event.target.getAttribute('id'));
+  // render new images
+  if (numClicksAvailable===0)
+  {
+    alert('Thank you for participate. \nYou used all your availables votes.');
+  }
+} //function handleClicks
+
 /////////////////////////
 /////  MAIN
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
-maxNumSeletions = 25; // max number of total clicks in the page.
+numClicksAvailable = 5; //25 // max number of total clicks available in the site.
 
 // populating the list of products. By now, I will just load the first 5. TODO add the rest 
 new Product('bag', 'img/bag.jpg');
