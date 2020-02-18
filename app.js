@@ -27,6 +27,7 @@ function generatelistProductsToDisplay()
   var randomIndex;
   var duplicated;
   //TODO reset listProductsToDisplay 
+  listProductsToDisplay = []; //mequede. if not work, do a pull of all length
 
   // i'm going to ask for random numbers until I have full listProductsToDisplay
   while (listProductsToDisplay.length < maxlistProductsToDisplay)
@@ -47,6 +48,8 @@ function generatelistProductsToDisplay()
       allProductList[randomIndex].timesRendered++; // to have a control of how many times it was rendered
     }
   } //while (listProductsToDisplay.length < maxlistProductsToDisplay)
+  // display a the created listProductsToDisplay
+  renderProductsToDisplay();
 } //function displayProducts()
 
 /*
@@ -61,7 +64,7 @@ function renderProductsToDisplay()
   var numColumsToDisplay = 2;
   var tblProducts = document.getElementById('tblProducts');
 
-  // clean the table
+  // clean the table of the products
   tblProducts.innerHTML=null;
   // obtain the number of rows to create
   if (maxlistProductsToDisplay <= 2){
@@ -116,24 +119,74 @@ function handleClicks(event)
   var clickedProduct;
   // update the amount of clicks in the page
   numClicksAvailable--;
-  alert('numClicksAvailable ' + numClicksAvailable);
   // update the clicks in the image
   clickedProduct = event.target.getAttribute('id');
   allProductList[clickedProduct].timesClicked++;
-
-  alert(event.target.getAttribute('id'));
   // render new images
   if (numClicksAvailable===0)
   {
     alert('Thank you for participate. \nYou used all your availables votes.');
+    displayVotationResults();
+  }
+  else
+  {
+    generatelistProductsToDisplay();
   }
 } //function handleClicks
+
+/*
+This function create a table with all the values in allProductList.
+ */
+function displayVotationResults()
+{
+  var newRow, newCol;
+  var tblProducts = document.getElementById('tblProducts');
+  // clean the table of the products
+  tblProducts.innerHTML=null;
+
+  var tblVotingResults= document.getElementById('tblVotingResults'); 
+  // Create headers
+  newRow = document.createElement('tr');
+  newCol = document.createElement('th');
+  newCol.textContent='Product';
+  newRow.appendChild(newCol);
+  newCol = document.createElement('th');
+  newCol.textContent='Times Rendered';
+  newRow.appendChild(newCol);
+  newCol = document.createElement('th');
+  newCol.textContent='Times Clicked';
+  newRow.appendChild(newCol);
+  tblVotingResults.appendChild(newRow);
+
+
+  for (var i=0; i<allProductList.length; i++)
+  {
+    newRow = document.createElement('tr');
+    newCol = document.createElement('td');
+    newCol.textContent= allProductList[i].productName;
+    newRow.appendChild(newCol);
+
+    newCol = document.createElement('td');
+    newCol.textContent= allProductList[i].timesClicked;
+    newRow.appendChild(newCol);
+
+    newCol = document.createElement('td');
+    newCol.textContent= allProductList[i].timesRendered;
+    newRow.appendChild(newCol);
+    
+
+    newRow.appendChild(newCol);
+    tblVotingResults.appendChild(newRow);
+  }
+
+
+} //displayVotationResults
 
 /////////////////////////
 /////  MAIN
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
-numClicksAvailable = 5; //25 // max number of total clicks available in the site.
+numClicksAvailable = 3; //25 // max number of total clicks available in the site.
 
 // populating the list of products. By now, I will just load the first 5. TODO add the rest 
 new Product('bag', 'img/bag.jpg');
@@ -159,6 +212,6 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 
 // calling functions to do the magic
 generatelistProductsToDisplay();
-renderProductsToDisplay();
+// renderProductsToDisplay();
 
 
