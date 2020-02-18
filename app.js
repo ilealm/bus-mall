@@ -3,6 +3,7 @@
 var maxlistProductsToDisplay, numClicksAvailable;
 var allProductList=[];  // array with products objects
 var listProductsToDisplay=[]; // here I will storage the products to display in the page
+var previousListProductsToDisplay=[]; // is a copy of the last listProductsToDisplay, so I dont duplicate in next display
 var allProductsName=[]; // is an array with the names of products, so I can use it to render the canvas
 var arrColorClicks=[]; //this array will be the same length as and all positions will have the = value. Is for graphics.
 var arrColorRender=[];
@@ -34,19 +35,26 @@ function generatelistProductsToDisplay()
 {
   var randomIndex;
   var duplicated;
-  //TODO reset listProductsToDisplay 
-  listProductsToDisplay = []; //mequede. if not work, do a pull of all length
+ 
+// generateLast previousListProductsToDisplay
+  generatePreviousListProductsToDisplay();
+
+  listProductsToDisplay = [];
 
   // i'm going to ask for random numbers until I have full listProductsToDisplay
   while (listProductsToDisplay.length < maxlistProductsToDisplay)
   {
     // obtain a random product to display
     randomIndex = getRandomProductToDisplay();
+    // review that randomIndex is not in previousListProductsToDisplay
+    var justShowed = isThisProductJustShown(randomIndex);
+    // alert(randomIndex + ' is repeted ' + justShowed);
     duplicated = false;
     //review that that number is not already in the array listProductsToDisplay
     for (var i=0; i < listProductsToDisplay.length; i++)
     {
-      if (listProductsToDisplay[i] === randomIndex)
+      //if (listProductsToDisplay[i] === randomIndex) // and or isThisProductJustShown
+      if ((listProductsToDisplay[i] === randomIndex) || justShowed)
       {
         duplicated = true;
       }
@@ -54,11 +62,36 @@ function generatelistProductsToDisplay()
     if (!duplicated){
       listProductsToDisplay.push(randomIndex); // store the in in the array of products to display
       allProductList[randomIndex].timesRendered++; // to have a control of how many times it was rendered
+      //previousListProductsToDisplay.push(randomIndex);
     }
   } //while (listProductsToDisplay.length < maxlistProductsToDisplay)
   // display a the created listProductsToDisplay
   renderProductsToDisplay();
 } //function displayProducts()
+
+
+function generatePreviousListProductsToDisplay()
+{
+  previousListProductsToDisplay = [];
+  for (var i=0; i<listProductsToDisplay.length; i++)
+  {
+    previousListProductsToDisplay.push(listProductsToDisplay[i]);
+  }
+}
+
+
+function isThisProductJustShown(randomIndex)
+{
+  var justShown = false;
+  for (var f = 0; f < previousListProductsToDisplay.length; f++)
+  {
+    if (previousListProductsToDisplay[f] === randomIndex)
+    {
+      justShown = true;
+    }
+  }
+  return justShown;
+}
 
 /*
 This function will add rows and columns to table tblProducts showing whatever is stored 
@@ -231,7 +264,7 @@ function displayCanvas()
 /////  MAIN
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
-numClicksAvailable = 5; // max number of total clicks available in the site.
+numClicksAvailable = 10; // max number of total clicks available in the site.
 graphColorClicks='#BD3665';
 graphColorRender='lightgray';
 
