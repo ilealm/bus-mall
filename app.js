@@ -3,6 +3,7 @@
 var maxlistProductsToDisplay, numClicksAvailable;
 var allProductList=[];  // array with products objects
 var listProductsToDisplay=[]; // here I will storage the products to display in the page
+var allProductsName=[]; // is an array with the names of products, so I can use it to render the canvas
 
 function Product(productName, productPath){
   this.productName = productName;
@@ -10,6 +11,7 @@ function Product(productName, productPath){
   this.timesClicked = 0; // amount of times that user did clik on it
   this.timesRendered = 0; // amount of times this image was rendered.
   allProductList.push(this); //list of all products to show
+  allProductsName.push(productName);
 }
 
 function getRandomProductToDisplay()
@@ -144,6 +146,15 @@ function displayVotationResults()
   displayCanvas();
 } //displayVotationResults
 
+function getVotesInArray()
+{
+  var arrVotes=[];
+  for (var i=0; i<allProductList.length ; i++)
+  {
+    arrVotes.push(allProductList[i].timesClicked);
+  }
+  return arrVotes
+}
 
 function displayCanvas()
 {
@@ -151,10 +162,12 @@ function displayCanvas()
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: allProductsName,
       datasets: [{
         label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
+        // data: [12, 19, 3, 5, 2, 3],
+        data: getVotesInArray(),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
