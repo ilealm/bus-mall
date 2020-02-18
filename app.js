@@ -4,6 +4,9 @@ var maxlistProductsToDisplay, numClicksAvailable;
 var allProductList=[];  // array with products objects
 var listProductsToDisplay=[]; // here I will storage the products to display in the page
 var allProductsName=[]; // is an array with the names of products, so I can use it to render the canvas
+var arrColorClicks=[]; //this array will be the same length as and all positions will have the = value. Is for graphics.
+var arrColorRender=[];
+var graphColorClicks, graphColorRender;
 
 function Product(productName, productPath){
   this.productName = productName;
@@ -12,6 +15,10 @@ function Product(productName, productPath){
   this.timesRendered = 0; // amount of times this image was rendered.
   allProductList.push(this); //list of all products to show
   allProductsName.push(productName);
+  // values for the graph
+  arrColorClicks.push(graphColorClicks);
+  arrColorRender.push(graphColorRender);
+
 }
 
 function getRandomProductToDisplay()
@@ -178,24 +185,15 @@ function displayCanvas()
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       labels: allProductsName,
       datasets: [{
         label: '# of Votes',
-        // data: [12, 19, 3, 5, 2, 3],
         data: getVotesInArray(),
-        backgroundColor: [
-          // 'rgba(255, 99, 132, 0.2)',
-          // 'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          // 'rgba(75, 192, 192, 0.2)',
-          // 'rgba(153, 102, 255, 0.2)',
-          // 'rgba(255, 159, 64, 0.2)'
-        ],
+        backgroundColor: arrColorClicks,
         borderColor: [
-          // 'rgba(255, 99, 132, 1)',
+          'rgba(255, 99, 132, 1)'
           // 'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
+          // 'rgba(255, 206, 86, 1)',
           // 'rgba(75, 192, 192, 1)',
           // 'rgba(153, 102, 255, 1)',
           // 'rgba(255, 159, 64, 1)'
@@ -204,23 +202,15 @@ function displayCanvas()
       },
       {
         label: '# of Render',
-        // data: [12, 19, 3, 5, 2, 3],
         data: getNumRenderinArray(),
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
+        backgroundColor:arrColorRender,
         borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
+          // 'rgba(255, 99, 132, 1)',
+          // 'rgba(54, 162, 235, 1)',
+          // 'rgba(255, 206, 86, 1)',
+          // 'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)'
+          // 'rgba(255, 159, 64, 1)'
         ],
         borderWidth: 1
       }]
@@ -242,6 +232,8 @@ function displayCanvas()
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
 numClicksAvailable = 5; // max number of total clicks available in the site.
+graphColorClicks='#BD3665';
+graphColorRender='lightgray';
 
 // populating the list of products. By now, I will just load the first 5. TODO add the rest 
 new Product('bag', 'img/bag.jpg');
