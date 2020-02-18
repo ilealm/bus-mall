@@ -139,54 +139,68 @@ This function create a table with all the values in allProductList.
  */
 function displayVotationResults()
 {
-  var newRow, newCol;
+  // var newRow, newCol;
   var tblProducts = document.getElementById('tblProducts');
   // clean the table of the products
   tblProducts.innerHTML=null;
 
-  var tblVotingResults= document.getElementById('tblVotingResults'); 
-  // Create headers
-  newRow = document.createElement('tr');
-  newCol = document.createElement('th');
-  newCol.textContent='Product';
-  newRow.appendChild(newCol);
-  newCol = document.createElement('th');
-  newCol.textContent='Times Rendered';
-  newRow.appendChild(newCol);
-  newCol = document.createElement('th');
-  newCol.textContent='Times Clicked';
-  newRow.appendChild(newCol);
-  tblVotingResults.appendChild(newRow);
 
-
-  for (var i=0; i<allProductList.length; i++)
+  var ulVotingResults = document.getElementById('ulVotingResults');
+  var liElement, votingMsg;
+   for (var i=0; i<allProductList.length; i++)
   {
-    newRow = document.createElement('tr');
-    newCol = document.createElement('td');
-    newCol.textContent= allProductList[i].productName;
-    newRow.appendChild(newCol);
+    votingMsg = '';
+    liElement = document.createElement('li');
+    votingMsg = allProductList[i].productName + ' had ' + allProductList[i].timesClicked;
+    votingMsg = votingMsg + ' votes and was shown ' + allProductList[i].timesRendered;
+    liElement.textContent= votingMsg;
 
-    newCol = document.createElement('td');
-    newCol.textContent= allProductList[i].timesClicked;
-    newRow.appendChild(newCol);
 
-    newCol = document.createElement('td');
-    newCol.textContent= allProductList[i].timesRendered;
-    newRow.appendChild(newCol);
-    
-
-    newRow.appendChild(newCol);
-    tblVotingResults.appendChild(newRow);
+    ulVotingResults.appendChild(liElement);
   }
 
+  // this display the voting results in a table
+  // var tblVotingResults= document.getElementById('tblVotingResults'); 
+  // // Create headers
+  // newRow = document.createElement('tr');
+  // newCol = document.createElement('th');
+  // newCol.textContent='Product';
+  // newRow.appendChild(newCol);
+  // newCol = document.createElement('th');
+  // newCol.textContent='Times Rendered';
+  // newRow.appendChild(newCol);
+  // newCol = document.createElement('th');
+  // newCol.textContent='Times Clicked';
+  // newRow.appendChild(newCol);
+  // tblVotingResults.appendChild(newRow);
 
+
+  // for (var i=0; i<allProductList.length; i++)
+  // {
+  //   newRow = document.createElement('tr');
+  //   newCol = document.createElement('td');
+  //   newCol.textContent= allProductList[i].productName;
+  //   newRow.appendChild(newCol);
+
+  //   newCol = document.createElement('td');
+  //   newCol.textContent= allProductList[i].timesClicked;
+  //   newRow.appendChild(newCol);
+
+  //   newCol = document.createElement('td');
+  //   newCol.textContent= allProductList[i].timesRendered;
+  //   newRow.appendChild(newCol);
+    
+
+  //   newRow.appendChild(newCol);
+  //   tblVotingResults.appendChild(newRow);
+  // }
 } //displayVotationResults
 
 /////////////////////////
 /////  MAIN
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
-numClicksAvailable = 3; //25 // max number of total clicks available in the site.
+numClicksAvailable = 25 // max number of total clicks available in the site.
 
 // populating the list of products. By now, I will just load the first 5. TODO add the rest 
 new Product('bag', 'img/bag.jpg');
