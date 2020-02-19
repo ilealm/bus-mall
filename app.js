@@ -1,13 +1,13 @@
 'use strict';
 
 var maxlistProductsToDisplay, numClicksAvailable;
-var allProductList=[];  // array with products objects
+var allProductList=[]; // array with products objects
 var listProductsToDisplay=[]; // here I will storage the products to display in the page
 var previousListProductsToDisplay=[]; // is a copy of the last listProductsToDisplay, so I dont duplicate in next display
 var allProductsName=[]; // is an array with the names of products, so I can use it to render the canvas
-var arrColorClicks=[]; //this array will be the same length as and all positions will have the = value. Is for graphics.
-var arrColorRender=[];
-var graphColorClicks, graphColorRender;
+var arrColorClicks=[]; //this array will be the same length as and all positions will have the = value. Is for canvas.
+var arrColorRender=[]; //this array will be the same length as and all positions will have the = value. Is for canvas.
+var graphColorClicks, graphColorRender; //canvas graphic column's colors
 
 function Product(productName, productPath){
   this.productName = productName;
@@ -35,8 +35,7 @@ function generatelistProductsToDisplay()
 {
   var randomIndex;
   var duplicated;
- 
-// generateLast previousListProductsToDisplay
+  // generateLast previousListProductsToDisplay
   generatePreviousListProductsToDisplay();
 
   listProductsToDisplay = [];
@@ -79,7 +78,9 @@ function generatePreviousListProductsToDisplay()
   }
 }
 
-
+/*
+Returns true/false is an indicated products has been shown in the previous display
+*/
 function isThisProductJustShown(randomIndex)
 {
   var justShown = false;
@@ -99,43 +100,44 @@ in listProductsToDisplay. It will create 3 images per row
 */
 function renderProductsToDisplay()
 {
-  var numRowsToDisplay=0; //i will display 2 images per row
-  var numRowsCreated = 0; //to control how many rows I had created
+  // var numRowsCreated = 0; //to control how many rows I had created
   var newImage;
-  var numColumsToDisplay = 2;
+  var numRowsToDisplay=0; //i will display 2 images per row
+  var maxColToDisplayPerRow = 2;
+  var newRow, newCol;
+  // var itemsRendered =0;
+  var currentListProductsToDisplayPosition = 0; //I will create a TD for each element in this array
+
   var tblProducts = document.getElementById('tblProducts');
 
   // clean the table of the products
   tblProducts.innerHTML=null;
-  // // obtain the number of rows to create
-  // if (maxlistProductsToDisplay <= 2){
-  //   numRowsToDisplay = 1;
-  // } 
-  // else 
-  // {
-  //   numRowsToDisplay = Math.ceil(maxlistProductsToDisplay/2);
-  // }
-  // // console.log('maxlistProductsToDisplay: ' + maxlistProductsToDisplay + ' / numRowsToDisplay ' + numRowsToDisplay);
-
-  var newRow, newCol;
-  // TODO: poner esto en una tabla
-  for (var p=0; p<listProductsToDisplay.length; p++)
+  // obtain the number of rows to create
+  if (maxlistProductsToDisplay <= maxColToDisplayPerRow){
+    numRowsToDisplay = 1;
+  } 
+  else 
   {
-    // newImage
+    numRowsToDisplay = Math.ceil(maxlistProductsToDisplay/maxColToDisplayPerRow);
+  }
+
+  //  now I know how many rows and columns I will display
+  for (var r=0; r<numRowsToDisplay; r++)
+  {
     newRow = document.createElement('tr');
-    newCol = document.createElement('rd');
-
-
-    newImage = document.createElement('img');
-    newImage.setAttribute('src',allProductList[listProductsToDisplay[p]].productPath);
-    newImage.setAttribute('alt', allProductList[listProductsToDisplay[p]].productName);
-    newImage.setAttribute('id', listProductsToDisplay[p]); // is the allProductList array position, to make a direct ref
-
-    newCol.appendChild(newImage);
-    newRow.appendChild(newCol);
+    for (var c=0;(c < maxColToDisplayPerRow) && (currentListProductsToDisplayPosition<listProductsToDisplay.length); c++ )
+    {
+      newCol = document.createElement('td');
+      newImage = document.createElement('img');
+      newImage.setAttribute('src',allProductList[listProductsToDisplay[currentListProductsToDisplayPosition]].productPath);
+      newImage.setAttribute('alt', allProductList[listProductsToDisplay[currentListProductsToDisplayPosition]].productName);
+      newImage.setAttribute('id', listProductsToDisplay[currentListProductsToDisplayPosition]); // is the allProductList array position, to make a direct ref
+      newImage.addEventListener('click',handleClicks);
+      newCol.appendChild(newImage);
+      newRow.appendChild(newCol);
+      currentListProductsToDisplayPosition++;
+    }
     tblProducts.appendChild(newRow);
-    // add event listener for the image
-    newImage.addEventListener('click',handleClicks);
   }
 } // renderProductsToDisplay()
 
@@ -179,8 +181,6 @@ function displayVotationResults()
     votingMsg = allProductList[i].productName + ' had ' + allProductList[i].timesClicked;
     votingMsg = votingMsg + ' votes and was shown ' + allProductList[i].timesRendered;
     liElement.textContent= votingMsg;
-
-
     ulVotingResults.appendChild(liElement);
   }
   displayCanvas();
@@ -223,28 +223,14 @@ function displayCanvas()
         label: '# of Votes',
         data: getVotesInArray(),
         backgroundColor: arrColorClicks,
-        borderColor: [
-          'rgba(255, 99, 132, 1)'
-          // 'rgba(54, 162, 235, 1)',
-          // 'rgba(255, 206, 86, 1)',
-          // 'rgba(75, 192, 192, 1)',
-          // 'rgba(153, 102, 255, 1)',
-          // 'rgba(255, 159, 64, 1)'
-        ],
+        borderColor: arrColorClicks,
         borderWidth: 1
       },
       {
         label: '# of Render',
         data: getNumRenderinArray(),
-        backgroundColor:arrColorRender,
-        borderColor: [
-          // 'rgba(255, 99, 132, 1)',
-          // 'rgba(54, 162, 235, 1)',
-          // 'rgba(255, 206, 86, 1)',
-          // 'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)'
-          // 'rgba(255, 159, 64, 1)'
-        ],
+        backgroundColor: arrColorRender,
+        borderColor: arrColorRender, //TODO change the color of the border
         borderWidth: 1
       }]
     },
