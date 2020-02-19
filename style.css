@@ -16,7 +16,12 @@ body{
   border-style: solid;
 }
 
-
+#lbTitle{
+  font-family: 'Damion', cursive;
+  font-weight: bolder;
+  font-size: 40pt;
+  color:#BD3665;
+}
 
 img {
   height: 200px;
