@@ -48,11 +48,12 @@ function generatelistProductsToDisplay()
     // review that randomIndex is not in previousListProductsToDisplay
     var justShowed = isThisProductJustShown(randomIndex);
     duplicated = false;
-    //review that that number is not already in the array listProductsToDisplay
-    for (var i=0; i < listProductsToDisplay.length; i++)
+    //review that that number is not already in the array listProductsToDisplay 
+    // // // for (var i=0; i < listProductsToDisplay.length; i++)
+    for (var i=0; i < previousListProductsToDisplay.length; i++)
     {
-      //if (listProductsToDisplay[i] === randomIndex) // and or isThisProductJustShown
-      if ((listProductsToDisplay[i] === randomIndex) || justShowed)
+      // i look that the randomIndex isn't in previousListProductsToDisplay or listProductsToDisplay
+      if ((previousListProductsToDisplay[i] === randomIndex) || (listProductsToDisplay[i] === randomIndex) || justShowed)
       {
         duplicated = true;
       }
@@ -197,7 +198,7 @@ function displayVotationResults()
   var tblProducts = document.getElementById('tblProducts');
   // clean the table of the products
   tblProducts.innerHTML=null;
-
+  tblProducts.remove();
 
   var ulVotingResults = document.getElementById('ulVotingResults');
   var liElement, votingMsg;
@@ -311,7 +312,6 @@ new Product('wine-glass', 'img/wine-glass.jpg');
 // }
 // window.addEventListener('blur', pause);
 
-// TODO 2: load whatever we have in storage and merge with allProductList
 
 generatelistProductsToDisplay();
 
