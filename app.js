@@ -47,7 +47,6 @@ function generatelistProductsToDisplay()
     randomIndex = getRandomProductToDisplay();
     // review that randomIndex is not in previousListProductsToDisplay
     var justShowed = isThisProductJustShown(randomIndex);
-    // alert(randomIndex + ' is repeted ' + justShowed);
     duplicated = false;
     //review that that number is not already in the array listProductsToDisplay
     for (var i=0; i < listProductsToDisplay.length; i++)
@@ -153,6 +152,7 @@ function handleClicks(event)
   if (numClicksAvailable===0)
   {
     alert('Thank you for participate. \nYou used all your availables votes.');
+    storeAllProductList();
     displayVotationResults();
   }
   else
@@ -160,6 +160,33 @@ function handleClicks(event)
     generatelistProductsToDisplay();
   }
 } //function handleClicks
+
+/*
+This functions search for the storedObject storedBusVotes, if exists, then update the values of
+allProductList.timesClicked and timesRendered, adding what is stored in localMemory
+*/
+function storeAllProductList()
+{
+  // obtain the stored array. if is null, I will create it, if not, I will upodate it.
+  var storedVotes, storedAllProductList;
+  //key: storedBusVotes
+  storedVotes = localStorage.getItem('storedBusVotes');
+  if (storedVotes !== null)
+  {
+    storedAllProductList = JSON.parse(storedVotes);
+    // now, I will update the values of timesClicked and timesRendered of each product in the array. 
+    // this upd array, is the one than will be displayed and the one that will be stored. Updating stored values
+    for (var i=0; i<allProductList.length; i++)
+    {
+      allProductList[i].timesClicked = allProductList[i].timesClicked + storedAllProductList[i].timesClicked;
+      allProductList[i].timesRendered = allProductList[i].timesRendered + storedAllProductList[i].timesRendered;
+    }
+  } //if (storedVotes ===null)
+
+  // store the values of the array. It will create or overwrite it
+  storedAllProductList = JSON.stringify(allProductList);
+  localStorage.setItem('storedBusVotes',storedAllProductList);
+}//storeAllProductList
 
 /*
 This function create a table with all the values in allProductList.
@@ -277,5 +304,14 @@ new Product('water-can', 'img/water-can.jpg');
 new Product('wine-glass', 'img/wine-glass.jpg');
 
 // calling functions to do the magic
+
+// function pause() {
+//   alert('lost focus !!');
+//   console.log('creating lisener to blur');
+// }
+// window.addEventListener('blur', pause);
+
+// TODO 2: load whatever we have in storage and merge with allProductList
+
 generatelistProductsToDisplay();
 
