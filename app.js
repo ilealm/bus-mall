@@ -277,7 +277,7 @@ function displayCanvas()
 /////  MAIN
 /////////////////////////
 maxlistProductsToDisplay = 3; // how many products will be rendered in the page
-numClicksAvailable = 5; // max number of total clicks available in the site.
+numClicksAvailable = 25; // max number of total clicks available in the site.
 graphColorClicks='#BD3665';
 graphColorRender='lightgray';
 
